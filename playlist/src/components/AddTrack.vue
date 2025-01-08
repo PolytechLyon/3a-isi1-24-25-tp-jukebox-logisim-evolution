@@ -3,12 +3,16 @@ import { ref } from 'vue';
 
 const trackFile = ref(null);
 const isUploadDisabled = ref(true);
+const isLinkMode = ref(false);
+const linkText = ref('');
 
 const handleMethodChange = (event) => {
     if (event.target.value === 'upload') {
+        isLinkMode.value = false;
         isUploadDisabled.value = !trackFile.value;
     } else {
-        isUploadDisabled.value = true;
+        isLinkMode.value = true;
+        isUploadDisabled.value = !linkText.value;
     }
 }
 
@@ -21,10 +25,9 @@ const handleFileChange = (event) => {
     }
 }
 
-const handleRemoveTrack = () => {
-    trackFile.value = null;
-    isUploadDisabled.value = true;
-    document.getElementById('track-file').value = null;
+const handleLinkChange = (event) => {
+    linkText.value = event.target.value;
+    isUploadDisabled.value = !linkText.value;
 }
 </script>
 
@@ -35,9 +38,9 @@ const handleRemoveTrack = () => {
         <option value="upload">Upload</option>
         <option value="link">Link</option>
     </select>
-    <input type="file" id="track-file" @change="handleFileChange" />
+    <input v-if="!isLinkMode" type="file" id="track-file" @change="handleFileChange" />
+    <input v-else placeholder="Provide URL" type="text" @input="handleLinkChange" />
     <button :disabled="isUploadDisabled">Upload</button>
-    <button @click="handleRemoveTrack">Supprimer le morceau</button>
 </template>
 
 <style scoped>
