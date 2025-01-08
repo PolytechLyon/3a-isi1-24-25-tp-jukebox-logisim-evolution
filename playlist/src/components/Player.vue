@@ -3,7 +3,7 @@ import { ref, watchEffect, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useGestionPlaylist } from '../composables/gestionPlaylist'; 
 const { getCurrentMusic, getNextMusic } = useGestionPlaylist();
 
-const playingMessage = ref('Playing');
+const playingMessage = ref('Now playing: ');
 const audioReference = ref(null);
 const progressReference = ref(null);
 const currentMusic = ref(null);
