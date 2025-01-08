@@ -1,6 +1,6 @@
 <script setup>
 import { useGestionPlaylist } from '../composables/gestionPlaylist';
-const { playlist, deleteMusic } = useGestionPlaylist();
+const { playlist, deleteMusic, playMusic } = useGestionPlaylist();
 
 
 
@@ -19,7 +19,7 @@ const { playlist, deleteMusic } = useGestionPlaylist();
             <tr v-for="track in playlist" :key="track.id">
                 <td>{{ track.name }}</td>
                 <td>
-                    <button>Play</button>
+                    <button @click="playMusic(track.id)">Play</button>
                     <button @click="deleteMusic(track.id)">Remove</button>
                 </td>
             </tr>

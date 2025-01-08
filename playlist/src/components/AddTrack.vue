@@ -20,7 +20,6 @@ function uploadSelected(event) {
 }
 
 function clickUpload() {
-    console.log('File uploaded');
     addMusic(songName.value, blobURL.value);
     songName.value = "";
     blobURL.value = "";
