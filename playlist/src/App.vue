@@ -8,7 +8,7 @@ import AddTrack from './components/AddTrack.vue';
 
 <template>
   <header>
-    <h1>Playlist</h1>
+    <h1>Jukebox</h1>
     <Player />
     <Playlist />
     <AddTrack />
