@@ -3,6 +3,7 @@ import { ref, watchEffect, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useGestionPlaylist } from '../composables/gestionPlaylist'; 
 const { getCurrentMusic, getNextMusic } = useGestionPlaylist();
 
+const playingMessage = ref('Playing');
 const audioReference = ref(null);
 const progressReference = ref(null);
 const currentMusic = ref(null);
@@ -72,16 +73,18 @@ onBeforeUnmount(() => {
 <template>
     <h2>Player</h2>
 
-    <div class="playing"> {{ playingMessage }} </div>
+    <div class="playing"> {{ playingMessage }} {{ currentMusic ? currentMusic.name : '' }}
 
-    <div>
-    <div v-if="currentMusic">
-        <audio :src="currentMusic.url" ref="audioReference"></audio>
-        <button @click="togglePlayPause">{{ textButtonPlayPause }}</button>
-        <progress id="progress" ref="progressReference" value="0" max="100"></progress>
-    </div>
-    <div v-else>
-        <p>No music selected</p>
+        
+        <div v-if="currentMusic">
+            <audio :src="currentMusic.url" ref="audioReference"></audio>
+            <button @click="togglePlayPause">{{ textButtonPlayPause }}</button>
+            <progress id="progress" ref="progressReference" value="0" max="100"></progress>
+        </div>
+        <div v-else>
+            <p>No music selected</p>
+        </div>
+        
     </div>
     <fieldset>
         <legend>Playback mode</legend>  
@@ -92,7 +95,7 @@ onBeforeUnmount(() => {
         <input type="radio" id="no-repeat" name="mode" value="don-t-repeat" />
         <label for="don-t-repeat">No Repeat</label>
     </fieldset>
-    </div>
+    
 </template>
 
 <style scoped>
