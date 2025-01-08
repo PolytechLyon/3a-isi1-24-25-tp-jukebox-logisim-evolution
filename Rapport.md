@@ -1,8 +1,8 @@
 # Compte Rendu TP Jukebox
 
 ## Binôme
-- Nom Prénom
-- Nom Prénom
+- Coutant Luka
+- Grenier Lilas
 
 ## Choix de conception et de réalisation
 
