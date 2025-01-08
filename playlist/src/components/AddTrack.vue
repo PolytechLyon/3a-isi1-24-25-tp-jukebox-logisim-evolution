@@ -1,48 +1,55 @@
 <script setup>
 import { ref } from 'vue';
+import { useGestionPlaylist } from '../composables/gestionPlaylist';
+const { playlist, addMusic } = useGestionPlaylist();
 
-const trackFile = ref(null);
-const isUploadDisabled = ref(true);
-const isLinkMode = ref(false);
-const linkText = ref('');
+let addTrackOptions = ref(["By URL", "Via file upload"]);
+let uploadFile = ref(null);
+let songURL = ref("");
+let blobURL = ref("");
+let songName = ref("");
 
-const handleMethodChange = (event) => {
-    if (event.target.value === 'upload') {
-        isLinkMode.value = false;
-        isUploadDisabled.value = !trackFile.value;
-    } else {
-        isLinkMode.value = true;
-        isUploadDisabled.value = !linkText.value;
-    }
+function onChange(event) {
+	uploadFile.value = (event.target.value == addTrackOptions.value[1]);
 }
 
-const handleFileChange = (event) => {
-    trackFile.value = event.target.files[0];
-    if (trackFile.value) {
-        isUploadDisabled.value = false;
-    } else {
-        isUploadDisabled.value = true;
-    }
+function uploadSelected(event) {
+    blobURL.value = URL.createObjectURL(event.target.files[0]);
+    songName.value = event.target.value;
+    songName.value = songName.value.substring(songName.value.lastIndexOf("\\") + 1);
 }
 
-const handleLinkChange = (event) => {
-    linkText.value = event.target.value;
-    isUploadDisabled.value = !linkText.value;
+function clickUpload() {
+    console.log('File uploaded');
+    addMusic(songName.value, blobURL.value);
+    songName.value = "";
+    blobURL.value = "";
 }
+
+function clickURL() {
+    console.log('URL added');
+}
+
 </script>
 
 <template>
-    <h2>Add Track</h2>
-    <label for="method-selector">Choose a method to add a track </label>
-    <select id="method-selector" @change="handleMethodChange">
-        <option value="upload">Upload</option>
-        <option value="link">Link</option>
-    </select>
-    <input v-if="!isLinkMode" type="file" id="track-file" @change="handleFileChange" />
-    <input v-else placeholder="Provide URL" type="text" @input="handleLinkChange" />
-    <button :disabled="isUploadDisabled">Upload</button>
+    <div>
+		<h2>New track</h2>
+		<label for="method-selector">Add track</label>
+		<select id="method-selector" @change="onChange">
+			<option v-for="option in addTrackOptions">{{ option }}</option>
+		</select>
+		<span v-if="uploadFile">
+			<input type="file" @change="uploadSelected" id="file-upload"/>
+			<button :disabled="!blobURL" @click="clickUpload">Add uploaded file</button>
+		</span>
+		<span v-else>
+			<input v-model="songURL" type="text" placeholder="Provide URL" />
+			<button :disabled="!songURL" @click="clickURL">Add URL</button>
+		</span>
+	</div>
 </template>
 
 <style scoped>
-    
+
 </style>

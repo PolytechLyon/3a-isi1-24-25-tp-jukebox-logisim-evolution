@@ -1,21 +1,30 @@
 <script setup>
-import { ref } from 'vue'
+import { useGestionPlaylist } from '../composables/gestionPlaylist';
+const { playlist, deleteMusic } = useGestionPlaylist();
 
-const txtlist = ref([])
 
-const addItem = () => {
-    const title = document.getElementById('new-todo-item-title').value
-    if (title) {
-        txtlist.value.push({ id: txtlist.value.length + 1, title })
-        document.getElementById('new-todo-item-title').value = ''
-    }
-    console.log('Item '+ txtlist.value.length +' added')
-}
 
 </script>
 
 <template>
     <h2>Playlist</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Track</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="track in playlist" :key="track.id">
+                <td>{{ track.name }}</td>
+                <td>
+                    <button>Play</button>
+                    <button @click="deleteMusic(track.id)">Remove</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </template>
 
 <style scoped>
