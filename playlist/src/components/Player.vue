@@ -12,9 +12,7 @@ const choiceReference = ref(0);
 
 watchEffect(async () => { 
     currentMusic.value = getCurrentMusic();
-    await nextTick(); // Attendre que l'élément audio soit rendu
     if (audioReference.value) {
-        console.log('Audio element is rendered'); // Ajoutez cette ligne pour déboguer
         textButtonPlayPause.value = 'pause';
         setTimeout(() => {
             audioReference.value.play();
@@ -39,7 +37,6 @@ const updateProgressBar = () => {
     if (audio && progress) {
         const progressValue = (audio.currentTime / audio.duration) * 100 || 0;
         progress.value = progressValue;
-        console.log(`Progress: ${progressValue}%`); // Ajoutez cette ligne pour déboguer
         if (audio.ended){
             audio.currentTime = 0;
             audio.play();
@@ -48,23 +45,17 @@ const updateProgressBar = () => {
 };
 
 onMounted(async () => {
-    await nextTick(); // Attendre que l'élément audio soit rendu
     const audio = audioReference.value;
     if (audio) {
-        console.log('Attaching timeupdate event'); // Ajoutez cette ligne pour déboguer
+        console.log('Attaching timeupdate event');
         audio.addEventListener('timeupdate', updateProgressBar);
-    } else {
-        console.log('Audio reference is null'); // Ajoutez cette ligne pour déboguer
     }
 });
 
 onBeforeUnmount(() => {
     const audio = audioReference.value;
     if (audio) {
-        console.log('Removing timeupdate event'); // Ajoutez cette ligne pour déboguer
         audio.removeEventListener('timeupdate', updateProgressBar);
-    } else {
-        console.log('Audio reference is null'); // Ajoutez cette ligne pour déboguer
     }
 });
 
@@ -74,8 +65,6 @@ onBeforeUnmount(() => {
     <h2>Player</h2>
 
     <div class="playing"> {{ playingMessage }} {{ currentMusic ? currentMusic.name : '' }}
-
-        
         <div v-if="currentMusic">
             <audio :src="currentMusic.url" ref="audioReference"></audio>
             <button @click="togglePlayPause">{{ textButtonPlayPause }}</button>
@@ -84,7 +73,6 @@ onBeforeUnmount(() => {
         <div v-else>
             <p>No music selected</p>
         </div>
-        
     </div>
     <fieldset>
         <legend>Playback mode</legend>  
@@ -95,7 +83,6 @@ onBeforeUnmount(() => {
         <input type="radio" id="no-repeat" name="mode" value="don-t-repeat" />
         <label for="don-t-repeat">No Repeat</label>
     </fieldset>
-    
 </template>
 
 <style scoped>
@@ -108,6 +95,5 @@ fieldset {
     margin: 1rem;
     border-radius: 5px;
     width: auto;
-
 }
 </style>
