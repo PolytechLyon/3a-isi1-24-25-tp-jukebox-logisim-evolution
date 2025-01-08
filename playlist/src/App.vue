@@ -2,6 +2,8 @@
 import Player from './components/Player.vue'
 import Playlist from './components/Playlist.vue'
 import AddTrack from './components/AddTrack.vue';
+
+
 </script>
 
 <template>
@@ -14,5 +16,10 @@ import AddTrack from './components/AddTrack.vue';
 </template>
 
 <style scoped>
-
+header {
+  margin-top: 60px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+}
 </style>

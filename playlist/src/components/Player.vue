@@ -7,7 +7,7 @@
     <div>Choose a song to play</div>
     <fieldset>
         <legend>Playback mode</legend>
-        <input type="radio" id="repeat-list" name="mode" value="repeat-list" />
+        <input type="radio" id="repeat-list" name="mode" value="repeat-list" checked="checked" />
         <label for="repeat-list">Repeat list</label>
         <input type="radio" id="repeat-one" name="mode" value="repeat-one" />
         <label for="repeat-one">Repeat one</label>
