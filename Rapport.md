@@ -7,7 +7,7 @@
 ## Choix de conception et de réalisation
 Les consignes du projet sont dans le fichier [Consignes](Consignes.md).  
 
-[index.html](index.html) se trouve à la racine, et le code source du projet se trouve dans le dossier dossier [src](src). A la racine de [src](src) se trouvent les fichiers [App.vue](src/App.vue) et [main.js](src/main.js), et les sous-dossiers [composables](src/composables) (contenant [gestionPlaylist.js](src\composables\gestionPlaylist.js) modèles des fonctions communes aux components) et [components](src\components). Ce dernier contient [Player.vue](src\components\Player.vue), [Playlist.vue](src\components\Playlist.vue) et [AddTrack.vue](src\components\AddTrack.vue), créées selon le modèle script-template-style de Vue, correspondant aux différents éléments de la page.  
+[index.html](index.html) se trouve à la racine, et le code source du projet se trouve dans le dossier dossier [src](src). A la racine de [src](src) se trouvent les fichiers [App.vue](src/App.vue) et [main.js](src/main.js), et les sous-dossiers [composables](src/composables) (contenant [gestionPlaylist.js](src/composables/gestionPlaylist.js) modèles des fonctions communes aux components) et [components](src/components). Ce dernier contient [Player.vue](src/components/Player.vue), [Playlist.vue](src/components/Playlist.vue) et [AddTrack.vue](src/components/AddTrack.vue), créées selon le modèle script-template-style de Vue, correspondant aux différents éléments de la page.  
 
 La documentation des fichiers se trouvent dans tous les fichiers .js et les balises script.
 
