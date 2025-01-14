@@ -36,7 +36,7 @@ function getNextMusic() {
         nextIndex = (nextIndex + 1) % playlist.value.length;
         nextMusic = playlist.value[nextIndex];
         if (nextIndex === index) {
-            nextMusic = null;
+            nextMusic = currentMusic.value;
             break;
         }
     }
