@@ -33,7 +33,7 @@ function getNextMusic() {
     let nextMusic = playlist.value[nextIndex];
 
     // Loop through the playlist to find the next playable music
-    while (nextMusic && !nextMusic.url.endsWith('.mp3')) {
+    while (nextMusic && !nextMusic.name.endsWith('.mp3')) {
         nextIndex = (nextIndex + 1) % playlist.value.length;
         nextMusic = playlist.value[nextIndex];
         // If we loop back to the current music, break to avoid infinite loop
