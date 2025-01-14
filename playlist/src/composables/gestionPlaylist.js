@@ -1,17 +1,32 @@
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const playlist = ref([]);
 const currentMusic = ref(null);
 const currentId = ref(0);
 
+
+const loadPlaylist = () => {
+    const savedPlaylist = JSON.parse(localStorage.getItem('playlist') || '[]');
+    playlist.value = savedPlaylist.map((music, index) => ({ ...music, id: index }));
+    currentId.value = playlist.value.length;
+};
+
+
+const savePlaylist = () => {
+    const publicPlaylist = playlist.value.filter(music => music.url.startsWith('http'));
+    localStorage.setItem('playlist', JSON.stringify(publicPlaylist));
+};
+
 const addMusic = (musicName, musicUrl) => {
     playlist.value.push({ id: currentId.value, name: musicName, url: musicUrl });
     currentId.value++;
-}
+    savePlaylist();
+};
 
 function deleteMusic(id) {
     const index = playlist.value.findIndex(music => music.id === id);
     playlist.value.splice(index, 1);
+    savePlaylist();
 }
 
 function playMusic(id) {
@@ -43,6 +58,8 @@ function getNextMusic() {
 
     return nextMusic;
 }
+
+loadPlaylist();
 
 export function useGestionPlaylist() {
     return { playlist, currentMusic, addMusic, deleteMusic, playMusic, getCurrentMusic, getNextMusic };
