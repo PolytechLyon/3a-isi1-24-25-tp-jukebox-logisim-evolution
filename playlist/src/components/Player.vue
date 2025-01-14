@@ -41,7 +41,11 @@ const updateProgressBar = () => {
             switch (playbackMode.value) {
                 case 'repeat-list':
                     nextTick(() => {
+
                         const nextMusic = getNextMusic();
+                        while (nextMusic && !nextMusic.name.endsWith('.mp3')) {
+                            nextMusic = getNextMusic();
+                        }
                         if (nextMusic) {
                             playMusic(nextMusic.id);
                             audio.src = nextMusic.url;
