@@ -37,7 +37,7 @@ const handlePlayMusic = (id) => {
         </thead>
         <tbody>
             <tr v-for="track in playlist" :key="track.id">
-                <td>{{ track.name }}</td>
+                <td :class="{ 'playing-track': getCurrentMusic() && getCurrentMusic().id === track.id }">{{ track.name }}</td>
                 <td>
                     <button @click="handlePlayMusic(track.id)">Play</button>
                     <button @click="deleteMusic(track.id)">Remove</button>
@@ -48,5 +48,7 @@ const handlePlayMusic = (id) => {
 </template>
 
 <style scoped>
-
+.playing-track {
+    font-weight: bold;
+}
 </style>
