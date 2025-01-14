@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watchEffect, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useGestionPlaylist } from '../composables/gestionPlaylist'; 
-const { getCurrentMusic, getNextMusic, playMusic, playlist } = useGestionPlaylist();
+const { currentMusic: cm, getCurrentMusic, getNextMusic, playMusic, playlist } = useGestionPlaylist();
 
 const playingMessage = ref('Now playing: ');
 const audioReference = ref(null);
@@ -15,16 +15,14 @@ const playbackMode = ref('repeat-list');
  * If there is an audio reference and current music, it sets the play/pause button text to 'pause'
  * and plays the audio after a short delay.
  */
-watchEffect(() => { 
+ watchEffect(() => { 
     currentMusic.value = getCurrentMusic();
     if (audioReference.value && currentMusic.value) {
         textButtonPlayPause.value = 'pause';
         setTimeout(() => {
             audioReference.value.play().catch(() => {
-                    console.log(currentMusic);
-                    console.log(playlist.value.findIndex(song => song.id === currentMusic.id));
-                    playlist.value[playlist.value.findIndex(song => song.id === currentMusic.id)].playable = false;
-                    getNextMusic();
+                    playlist.value[playlist.value.findIndex(song => song.id === currentMusic.value.id)].playable = false;
+                    cm.value = getNextMusic();
                 });
         }, 10);
     }
