@@ -1,8 +1,23 @@
 <script setup>
 import { useGestionPlaylist } from '../composables/gestionPlaylist';
-const { playlist, deleteMusic, playMusic } = useGestionPlaylist();
+const { playlist, deleteMusic, playMusic, getCurrentMusic } = useGestionPlaylist();
 
-
+const handlePlayMusic = (id) => {
+    const currentMusic = getCurrentMusic();
+    if (currentMusic && currentMusic.id !== id) {
+        const audio = document.querySelector('audio');
+        if (audio) {
+            audio.pause();
+        }
+    }
+    playMusic(id);
+    nextTick(() => {
+        const audio = document.querySelector('audio');
+        if (audio) {
+            audio.play();
+        }
+    });
+};
 
 </script>
 
@@ -19,7 +34,7 @@ const { playlist, deleteMusic, playMusic } = useGestionPlaylist();
             <tr v-for="track in playlist" :key="track.id">
                 <td>{{ track.name }}</td>
                 <td>
-                    <button @click="playMusic(track.id)">Play</button>
+                    <button @click="handlePlayMusic(track.id)">Play</button>
                     <button @click="deleteMusic(track.id)">Remove</button>
                 </td>
             </tr>

@@ -8,7 +8,7 @@ const audioReference = ref(null);
 const progressReference = ref(null);
 const currentMusic = ref(null);
 const textButtonPlayPause = ref('play');
-const choiceReference = ref(0);
+const playbackMode = ref('repeat-list');
 
 watchEffect(async () => { 
     currentMusic.value = getCurrentMusic();
@@ -38,16 +38,35 @@ const updateProgressBar = () => {
         const progressValue = (audio.currentTime / audio.duration) * 100 || 0;
         progress.value = progressValue;
         if (audio.ended){
-            audio.currentTime = 0;
-            audio.play();
+            switch (playbackMode.value) {
+                case 'repeat-list':
+                    nextTick(() => {
+                        const nextMusic = getNextMusic();
+                        if (nextMusic) {
+                            currentMusic.value = nextMusic;
+                            audio.src = nextMusic.url;
+                            audio.addEventListener('canplay', () => {
+                                audio.play();
+                                textButtonPlayPause.value = 'pause';
+                            }, { once: true });
+                        }
+                    });
+                    break;
+                case 'repeat-one':
+                    audio.play();
+                    break;
+                case 'don-t-repeat':
+                    audio.pause();
+                    textButtonPlayPause.value = 'play';
+                    break;
+            }
         }
     }
 };
 
-onMounted(async () => {
+onMounted(() => {
     const audio = audioReference.value;
     if (audio) {
-        console.log('Attaching timeupdate event');
         audio.addEventListener('timeupdate', updateProgressBar);
     }
 });
@@ -66,21 +85,21 @@ onBeforeUnmount(() => {
 
     <div class="playing"> {{ playingMessage }} {{ currentMusic ? currentMusic.name : '' }}
         <div v-if="currentMusic">
-            <audio :src="currentMusic.url" ref="audioReference"></audio>
             <button @click="togglePlayPause">{{ textButtonPlayPause }}</button>
             <progress id="progress" ref="progressReference" value="0" max="100"></progress>
         </div>
         <div v-else>
             <p>No music selected</p>
         </div>
+        <audio :src="currentMusic ? currentMusic.url : ''" ref="audioReference"></audio>
     </div>
     <fieldset>
         <legend>Playback mode</legend>  
-        <input type="radio" id="repeat-list" name="mode" value="repeat-list" checked="checked" />
+        <input type="radio" id="repeat-list" name="mode" value="repeat-list" v-model="playbackMode" />
         <label for="repeat-list">Repeat list</label>
-        <input type="radio" id="repeat-one" name="mode" value="repeat-one" />
+        <input type="radio" id="repeat-one" name="mode" value="repeat-one" v-model="playbackMode" />
         <label for="repeat-one">Repeat one</label>
-        <input type="radio" id="no-repeat" name="mode" value="don-t-repeat" />
+        <input type="radio" id="no-repeat" name="mode" value="don-t-repeat" v-model="playbackMode" />
         <label for="don-t-repeat">No Repeat</label>
     </fieldset>
 </template>

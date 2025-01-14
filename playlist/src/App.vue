@@ -2,8 +2,6 @@
 import Player from './components/Player.vue'
 import Playlist from './components/Playlist.vue'
 import AddTrack from './components/AddTrack.vue';
-
-
 </script>
 
 <template>
