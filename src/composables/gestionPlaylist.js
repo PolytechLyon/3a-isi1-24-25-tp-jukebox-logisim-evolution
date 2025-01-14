@@ -38,7 +38,7 @@ const savePlaylist = () => {
  * @param {string} musicUrl - The URL of the music to be added.
  */
 const addMusic = (musicName, musicUrl) => {
-    playlist.value.push({ id: currentId.value, name: musicName, url: musicUrl });
+    playlist.value.push({ id: currentId.value, name: musicName, url: musicUrl, playable: true });
     currentId.value++;
     savePlaylist();
 };
@@ -91,7 +91,7 @@ function getNextMusic() {
     let nextIndex = (index + 1) % playlist.value.length;
     let nextMusic = playlist.value[nextIndex];
 
-    while (nextMusic && !(nextMusic.name.endsWith('.mp3') || nextMusic.name.endsWith('.ogg') || nextMusic.name.endsWith('.wav'))) {
+    while (nextMusic && !nextMusic.playable) {
         nextIndex = (nextIndex + 1) % playlist.value.length;
         nextMusic = playlist.value[nextIndex];
         if (nextIndex === index) {

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watchEffect, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useGestionPlaylist } from '../composables/gestionPlaylist'; 
-const { getCurrentMusic, getNextMusic, playMusic } = useGestionPlaylist();
+const { getCurrentMusic, getNextMusic, playMusic, playlist } = useGestionPlaylist();
 
 const playingMessage = ref('Now playing: ');
 const audioReference = ref(null);
@@ -20,7 +20,12 @@ watchEffect(() => {
     if (audioReference.value && currentMusic.value) {
         textButtonPlayPause.value = 'pause';
         setTimeout(() => {
-            audioReference.value.play();
+            audioReference.value.play().catch(() => {
+                    console.log(currentMusic);
+                    console.log(playlist.value.findIndex(song => song.id === currentMusic.id));
+                    playlist.value[playlist.value.findIndex(song => song.id === currentMusic.id)].playable = false;
+                    getNextMusic();
+                });
         }, 10);
     }
 });
