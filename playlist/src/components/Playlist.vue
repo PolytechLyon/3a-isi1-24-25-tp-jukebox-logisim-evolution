@@ -3,6 +3,19 @@ import { nextTick } from 'vue';
 import { useGestionPlaylist } from '../composables/gestionPlaylist';
 const { playlist, deleteMusic, playMusic, getCurrentMusic } = useGestionPlaylist();
 
+/**
+ * Handles the play music action.
+ * 
+ * This function performs the following steps:
+ * 1. Retrieves the current music being played.
+ * 2. If there is a current music and its ID is different from the provided ID, pauses the current audio.
+ * 3. Calls the playMusic function with the provided ID.
+ * 4. Uses nextTick to ensure the DOM is updated before proceeding.
+ * 5. Finds the new music in the playlist by the provided ID.
+ * 6. If the new music is found, updates the audio source to the new music's URL and plays the audio.
+ * 
+ * @param {number} id - The ID of the music to be played.
+ */
 const handlePlayMusic = (id) => {
     const currentMusic = getCurrentMusic();
     if (currentMusic && currentMusic.id !== id) {

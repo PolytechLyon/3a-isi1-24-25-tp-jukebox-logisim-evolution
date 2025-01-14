@@ -10,6 +10,11 @@ const currentMusic = ref(null);
 const textButtonPlayPause = ref('play');
 const playbackMode = ref('repeat-list');
 
+/**
+ * Watches for changes and updates the current music and play/pause button text.
+ * If there is an audio reference and current music, it sets the play/pause button text to 'pause'
+ * and plays the audio after a short delay.
+ */
 watchEffect(() => { 
     currentMusic.value = getCurrentMusic();
     if (audioReference.value && currentMusic.value) {
@@ -20,6 +25,11 @@ watchEffect(() => {
     }
 });
 
+/**
+ * Toggles the play/pause state of the audio element.
+ * If the audio is currently paused, it will start playing and the button text will change to 'pause'.
+ * If the audio is currently playing, it will pause and the button text will change to 'play'.
+ */
 const togglePlayPause = () => {
     const audio = audioReference.value;
     if (audio.paused) {
@@ -31,6 +41,15 @@ const togglePlayPause = () => {
     }
 };
 
+/**
+ * Updates the progress bar based on the current playback time of the audio.
+ * - Calculates the progress value as a percentage of the current time over the total duration.
+ * - Updates the progress bar's value.
+ * - Handles the end of the audio playback based on the playback mode:
+ *   - 'repeat-list': Plays the next music in the list.
+ *   - 'repeat-one': Replays the current music.
+ *   - 'don-t-repeat': Pauses the audio and sets the play/pause button to 'play'.
+ */
 const updateProgressBar = () => {
     const audio = audioReference.value;
     const progress = progressReference.value;
@@ -64,6 +83,14 @@ const updateProgressBar = () => {
     }
 };
 
+/**
+ * Handles the click event on the progress bar to update the current time of the audio.
+ *
+ * @param {MouseEvent} event - The mouse event triggered by clicking on the progress bar.
+ *
+ * This function calculates the new playback time based on the click position
+ * relative to the progress bar's width and updates the audio's current time accordingly.
+ */
 const clickProgressBar = (event) => {
     const audio = audioReference.value;
     const progress = progressReference.value;
@@ -75,6 +102,11 @@ const clickProgressBar = (event) => {
     }
 };
 
+/**
+ * Lifecycle hook that is called when the component is mounted.
+ * It retrieves the audio element from the audioReference and adds an event listener
+ * for the 'timeupdate' event to update the progress bar.
+ */
 onMounted(() => {
     const audio = audioReference.value;
     if (audio) {
@@ -82,6 +114,15 @@ onMounted(() => {
     }
 });
 
+/**
+ * Lifecycle hook that is called right before the component is unmounted.
+ * This function removes the 'timeupdate' event listener from the audio element
+ * to prevent memory leaks and unnecessary updates when the component is destroyed.
+ * 
+ * @onBeforeUnmount - Vue lifecycle hook
+ * @audioReference - Reference to the audio element
+ * @updateProgressBar - Function to update the progress bar based on the audio's current time
+ */
 onBeforeUnmount(() => {
     const audio = audioReference.value;
     if (audio) {
