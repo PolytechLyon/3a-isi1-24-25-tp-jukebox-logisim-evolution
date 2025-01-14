@@ -26,7 +26,10 @@ function clickUpload() {
 }
 
 function clickURL() {
-    console.log('URL added');
+    let songNameShort = songURL.value;
+	songNameShort = songNameShort.substring(songNameShort.lastIndexOf("\\") + 1);
+	addMusic(songNameShort, songURL.value);
+	songURL.value = "";
 }
 
 </script>
