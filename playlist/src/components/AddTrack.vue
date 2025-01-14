@@ -19,13 +19,13 @@ function uploadSelected(event) {
     songName.value = songName.value.substring(songName.value.lastIndexOf("\\") + 1);
 }
 
-function clickUpload() {
+function addUpload() {
     addMusic(songName.value, blobURL.value);
     songName.value = "";
     blobURL.value = "";
 }
 
-function clickURL() {
+function addURL() {
     let songNameShort = songURL.value;
 	songNameShort = songNameShort.substring(songNameShort.lastIndexOf("\\") + 1);
 	addMusic(songNameShort, songURL.value);
@@ -43,11 +43,11 @@ function clickURL() {
 		</select>
 		<span v-if="uploadFile">
 			<input type="file" @change="uploadSelected" id="file-upload"/>
-			<button :disabled="!blobURL" @click="clickUpload">Add uploaded file</button>
+			<button :disabled="!blobURL" @click="addUpload">Add uploaded file</button>
 		</span>
 		<span v-else>
 			<input v-model="songURL" type="text" placeholder="Provide URL" />
-			<button :disabled="!songURL" @click="clickURL">Add URL</button>
+			<button :disabled="!songURL" @click="addURL">Add URL</button>
 		</span>
 	</div>
 </template>
