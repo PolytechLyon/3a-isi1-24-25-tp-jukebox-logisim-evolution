@@ -81,7 +81,7 @@ function getCurrentMusic() {
 /**
  * Retrieves the next music track in the playlist.
  * If the current track is the last one, it wraps around to the first track.
- * Skips tracks that do not have a name ending with '.mp3'.
+ * Skips tracks that do not have a name ending with '.mp3', '.ogg' or '.wav'.
  * If no valid next track is found, returns the current track.
  *
  * @returns {Object} The next music track object in the playlist.
@@ -91,7 +91,7 @@ function getNextMusic() {
     let nextIndex = (index + 1) % playlist.value.length;
     let nextMusic = playlist.value[nextIndex];
 
-    while (nextMusic && !nextMusic.name.endsWith('.mp3')) {
+    while (nextMusic && !(nextMusic.name.endsWith('.mp3') || nextMusic.name.endsWith('.ogg') || nextMusic.name.endsWith('.wav'))) {
         nextIndex = (nextIndex + 1) % playlist.value.length;
         nextMusic = playlist.value[nextIndex];
         if (nextIndex === index) {

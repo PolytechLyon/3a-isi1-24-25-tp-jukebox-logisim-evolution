@@ -51,11 +51,11 @@ const handlePlayMusic = (id) => {
         <tbody>
             <tr v-for="track in playlist" :key="track.id">
                 <td :class="{ 'playing-track': getCurrentMusic() && getCurrentMusic().id === track.id, 
-                        'unplayable-track': !(track.name.endsWith('.mp3')) }">
+                        'unplayable-track': !(track.name.endsWith('.mp3') || track.name.endsWith('.ogg') || track.name.endsWith('.wav')) }">
                         {{ track.name }}
                     </td>
                 <td>
-                    <button :disabled="!(track.name.endsWith('.mp3'))" @click="handlePlayMusic(track.id)">Play</button>
+                    <button :disabled="!(track.name.endsWith('.mp3') || track.name.endsWith('.ogg') || track.name.endsWith('.wav'))" @click="handlePlayMusic(track.id)">Play</button>
                     <button  @click="deleteMusic(track.id)">Remove</button>
                 </td>
             </tr>
