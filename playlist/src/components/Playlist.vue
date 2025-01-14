@@ -1,4 +1,5 @@
 <script setup>
+import { nextTick } from 'vue';
 import { useGestionPlaylist } from '../composables/gestionPlaylist';
 const { playlist, deleteMusic, playMusic, getCurrentMusic } = useGestionPlaylist();
 
@@ -14,7 +15,11 @@ const handlePlayMusic = (id) => {
     nextTick(() => {
         const audio = document.querySelector('audio');
         if (audio) {
-            audio.play();
+            const newMusic = playlist.value.find(music => music.id === id);
+            if (newMusic) {
+                audio.src = newMusic.url;
+                audio.play();
+            }
         }
     });
 };

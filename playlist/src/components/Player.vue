@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watchEffect, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useGestionPlaylist } from '../composables/gestionPlaylist'; 
-const { getCurrentMusic, getNextMusic } = useGestionPlaylist();
+const { getCurrentMusic, getNextMusic, playMusic } = useGestionPlaylist();
 
 const playingMessage = ref('Now playing: ');
 const audioReference = ref(null);
@@ -10,9 +10,9 @@ const currentMusic = ref(null);
 const textButtonPlayPause = ref('play');
 const playbackMode = ref('repeat-list');
 
-watchEffect(async () => { 
+watchEffect(() => { 
     currentMusic.value = getCurrentMusic();
-    if (audioReference.value) {
+    if (audioReference.value && currentMusic.value) {
         textButtonPlayPause.value = 'pause';
         setTimeout(() => {
             audioReference.value.play();
@@ -43,7 +43,7 @@ const updateProgressBar = () => {
                     nextTick(() => {
                         const nextMusic = getNextMusic();
                         if (nextMusic) {
-                            currentMusic.value = nextMusic;
+                            playMusic(nextMusic.id);
                             audio.src = nextMusic.url;
                             audio.addEventListener('canplay', () => {
                                 audio.play();
@@ -61,6 +61,17 @@ const updateProgressBar = () => {
                     break;
             }
         }
+    }
+};
+
+const clickProgressBar = (event) => {
+    const audio = audioReference.value;
+    const progress = progressReference.value;
+    if (audio && progress) {
+        const rect = progress.getBoundingClientRect();
+        const offsetX = event.clientX - rect.left;
+        const newTime = (offsetX / rect.width) * audio.duration;
+        audio.currentTime = newTime;
     }
 };
 
@@ -86,7 +97,7 @@ onBeforeUnmount(() => {
     <div class="playing"> {{ playingMessage }} {{ currentMusic ? currentMusic.name : '' }}
         <div v-if="currentMusic">
             <button @click="togglePlayPause">{{ textButtonPlayPause }}</button>
-            <progress id="progress" ref="progressReference" value="0" max="100"></progress>
+            <progress id="progress" ref="progressReference" value="0" max="100" @click="clickProgressBar"></progress>
         </div>
         <div v-else>
             <p>No music selected</p>
